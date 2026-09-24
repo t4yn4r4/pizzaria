@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍕 Pizzaria Deliciosa - Faça seu Pedido</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .menu-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .menu-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #ff6b35;
+            border-bottom: 3px solid #ff6b35;
+            padding-bottom: 10px;
+        }
+
+        .pizza-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pizza-item:hover {
+            border-color: #ff6b35;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,53,0.2);
+        }
+
+        .pizza-info {
+            flex: 1;
+        }
+
+        .pizza-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .pizza-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .pizza-price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .add-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            background: #e55a2b;
+            transform: scale(1.05);
+        }
+
+        .cart-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .cart-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #ff6b35;
+            border-bottom: 3px solid #ff6b35;
+            padding-bottom: 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 10px;
+        }
+
+        .quantity-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-btn:hover {
+            background: #e55a2b;
+        }
+
+        .quantity {
+            font-weight: bold;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .remove-btn:hover {
+            background: #c82333;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        .cart-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 3px solid #ff6b35;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ff6b35;
+            text-align: center;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background: #218838;
+            transform: scale(1.02);
+        }
+
+        .checkout-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+
+        .modal-message {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .modal-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal-btn:hover {
+            background: #e55a2b;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .pizza-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .add-btn {
+                align-self: stretch;
+            }
+
+            .cart-section {
+                position: static;
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍕 Pizzaria Deliciosa</h1>
+            <p>As melhores pizzas da cidade, feitas com amor e ingredientes frescos!</p>
+        </header>
+
+        <div class="main-content">
+            <div class="menu-section">
+                <h2 class="menu-title">📋 Menu de Pizzas</h2>
+                <div id="pizzaMenu">
+                    <!-- As pizzas serão inseridas aqui via JavaScript -->
+                </div>
+            </div>
+
+            <div class="cart-section">
+                <h2 class="cart-title">🛒 Seu Pedido</h2>
+                <div id="cartItems">
+                    <div class="empty-cart">Seu carrinho está vazio</div>
+                </div>
+                <div class="cart-total" id="cartTotal" style="display: none;">
+                    Total: R$ 0,00
+                </div>
+                <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>
+                    Finalizar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <h3 class="modal-title">🎉 Pedido Confirmado!</h3>
+            <p class="modal-message" id="orderMessage">
+                Seu pedido foi recebido com sucesso! Entraremos em contato em breve.
+            </p>
+            <button class="modal-btn" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <!-- Notificação -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // Dados das pizzas
+        const pizzas = [
+            {
+                id: 1,
+                name: "Margherita",
+                description: "Molho de tomate, mussarela, manjericão fresco",
+                price: 35.90
+            },
+            {
+                id: 2,
+                name: "Pepperoni",
+                description: "Molho de tomate, mussarela, pepperoni",
+                price: 42.90
+            },
+            {
+                id: 3,
+                name: "Quatro Queijos",
+                description: "Mussarela, provolone, parmesão, gorgonzola",
+                price: 45.90
+            },
+            {
+                id: 4,
+                name: "Calabresa",
+                description: "Molho de tomate, mussarela, calabresa, cebola",
+                price: 38.90
+            },
+            {
+                id: 5,
+                name: "Frango com Catupiry",
+                description: "Molho de tomate, frango desfiado, catupiry",
+                price: 44.90
+            },
+            {
+                id: 6,
+                name: "Vegetariana",
+                description: "Molho de tomate, mussarela, tomate, pimentão, cebola, azeitona",
+                price: 39.90
+            },
+            {
+                id: 7,
+                name: "Suprema",
+                description: "Molho de tomate, mussarela, pepperoni, calabresa, bacon, cebola",
+                price: 49.90
+            },
+            {
+                id: 8,
+                name: "Doce de Chocolate",
+                description: "Chocolate ao leite, morangos, granulado",
+                price: 32.90
+            }
+        ];
+
+        // Estado do carrinho
+        let cart = [];
+
+        // Inicializar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPizzaMenu();
+            updateCart();
+        });
+
+        // Renderizar menu de pizzas
+        function renderPizzaMenu() {
+            const menuContainer = document.getElementById('pizzaMenu');
+            menuContainer.innerHTML = '';
+
+            pizzas.forEach(pizza => {
+                const pizzaElement = document.createElement('div');
+                pizzaElement.className = 'pizza-item';
+                pizzaElement.innerHTML = `
+                    <div class="pizza-info">
+                        <div class="pizza-name">${pizza.name}</div>
+                        <div class="pizza-description">${pizza.description}</div>
+                        <div class="pizza-price">R$ ${pizza.price.toFixed(2).replace('.', ',')}</div>
+                    </div>
+                    <button class="add-btn" onclick="addToCart(${pizza.id})">
+                        Adicionar
+                    </button>
+                `;
+                menuContainer.appendChild(pizzaElement);
+            });
+        }
+
+        // Adicionar item ao carrinho
+        function addToCart(pizzaId) {
+            const pizza = pizzas.find(p => p.id === pizzaId);
+            const existingItem = cart.find(item => item.id === pizzaId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...pizza,
+                    quantity: 1
+                });
+            }
+
+            updateCart();
+            showNotification(`${pizza.name} adicionada ao carrinho!`);
+        }
+
+        // Remover item do carrinho
+        function removeFromCart(pizzaId) {
+            cart = cart.filter(item => item.id !== pizzaId);
+            updateCart();
+        }
+
+        // Alterar quantidade
+        function changeQuantity(pizzaId, change) {
+            const item = cart.find(item => item.id === pizzaId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(pizzaId);
+                } else {
+                    updateCart();
+                }
+            }
+        }
+
+        // Atualizar carrinho
+        function updateCart() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartTotalElement = document.getElementById('cartTotal');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<div class="empty-cart">Seu carrinho está vazio</div>';
+                cartTotalElement.style.display = 'none';
+                checkoutBtn.disabled = true;
+                return;
+            }
+
+            let total = 0;
+            cartItemsContainer.innerHTML = '';
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                const cartItemElement = document.createElement('div');
+                cartItemElement.className = 'cart-item';
+                cartItemElement.innerHTML = `
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">R$ ${item.price.toFixed(2).replace('.', ',')} cada</div>
+                    </div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="changeQuantity(${item.id}, -1)">-</button>
+                        <span class="quantity">${item.quantity}</span>
+                        <button class="quantity-btn" onclick="changeQuantity(${item.id}, 1)">+</button>
+                        <button class="remove-btn" onclick="removeFromCart(${item.id})">Remover</button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(cartItemElement);
+            });
+
+            cartTotalElement.textContent = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
+            cartTotalElement.style.display = 'block';
+            checkoutBtn.disabled = false;
+        }
+
+        // Finalizar pedido
+        function checkout() {
+            if (cart.length === 0) return;
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            // Simular processamento do pedido
+            const orderMessage = document.getElementById('orderMessage');
+            orderMessage.innerHTML = `
+                Seu pedido foi recebido com sucesso!<br><br>
+                <strong>${itemCount} item(s)</strong><br>
+                <strong>Total: R$ ${total.toFixed(2).replace('.', ',')}</strong><br><br>
+                Entraremos em contato em breve para confirmar a entrega.
+            `;
+
+            document.getElementById('successModal').style.display = 'flex';
+
+            // Limpar carrinho
+            cart = [];
+            updateCart();
+        }
+
+        // Fechar modal
+        function closeModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+
+        // Mostrar notificação
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Fechar modal ao clicar fora
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
